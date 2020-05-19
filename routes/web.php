@@ -22,38 +22,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('currencies/destroy', 'CurrencyController@massDestroy')->name('currencies.massDestroy');
     Route::resource('currencies', 'CurrencyController');
 
-    // Transactiontypes
-    Route::delete('transaction-types/destroy', 'TransactionTypeController@massDestroy')->name('transaction-types.massDestroy');
-    Route::resource('transaction-types', 'TransactionTypeController');
-
-    // Incomesources
-    Route::delete('income-sources/destroy', 'IncomeSourceController@massDestroy')->name('income-sources.massDestroy');
-    Route::resource('income-sources', 'IncomeSourceController');
-
-    // Clientstatuses
-    Route::delete('client-statuses/destroy', 'ClientStatusController@massDestroy')->name('client-statuses.massDestroy');
-    Route::resource('client-statuses', 'ClientStatusController');
-
-    // Projectstatuses
-    Route::delete('project-statuses/destroy', 'ProjectStatusController@massDestroy')->name('project-statuses.massDestroy');
-    Route::resource('project-statuses', 'ProjectStatusController');
-
-    // Clients
-    Route::delete('clients/destroy', 'ClientController@massDestroy')->name('clients.massDestroy');
-    Route::resource('clients', 'ClientController');
-
-    // Projects
-    Route::delete('projects/destroy', 'ProjectController@massDestroy')->name('projects.massDestroy');
-    Route::resource('projects', 'ProjectController');
-
-    // Notes
-    Route::delete('notes/destroy', 'NoteController@massDestroy')->name('notes.massDestroy');
-    Route::resource('notes', 'NoteController');
-
-    // Documents
-    Route::delete('documents/destroy', 'DocumentController@massDestroy')->name('documents.massDestroy');
-    Route::post('documents/media', 'DocumentController@storeMedia')->name('documents.storeMedia');
-    Route::resource('documents', 'DocumentController');
 
     // Transactions
     Route::delete('transactions/destroy', 'TransactionController@massDestroy')->name('transactions.massDestroy');
