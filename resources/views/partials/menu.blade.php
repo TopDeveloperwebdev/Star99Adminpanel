@@ -1,8 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="min-height: 917px;">
     <!-- Brand Logo -->
     <a href="#" class="brand-link">
-        <span class="brand-text font-weight-light"><img src="/img/logo.png" style="width: 93px;
-    margin-left: 25%;" /></span>
+        <span class="brand-text font-weight-light"><img src="/img/logo.png" style="width : 40%; margin-left : 20%" /></span>
     </a>
 
     <!-- Sidebar -->
@@ -31,6 +30,7 @@
                         </p>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {{ request()->is('admin/currencies') || request()->is('admin/currencies/*') ? 'active' : '' }}" href="{{ route("admin.currencies.index") }}">
                         <i class="fa-fw fas fa-cog">
@@ -41,6 +41,7 @@
                         </p>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{ route("admin.transactions.index") }}" class="nav-link {{ request()->is('admin/transactions') || request()->is('admin/transactions/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-credit-card">
@@ -51,7 +52,6 @@
                         </p>
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                         <p>
