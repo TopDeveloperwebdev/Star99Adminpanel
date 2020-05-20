@@ -12,7 +12,7 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.id') }}
+                            ID
                         </th>
                         <td>
                             {{ $user->id }}
@@ -20,39 +20,46 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.name') }}
+                            Phone
                         </th>
                         <td>
-                            {{ $user->name }}
+                            {{ $user->phone }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.email') }}
+                            Credits
                         </th>
                         <td>
-                            {{ $user->email }}
+                            {{ $user->credits }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.user.fields.email_verified_at') }}
+                            Max Best
                         </th>
                         <td>
-                            {{ $user->email_verified_at }}
+                            {{ $user->max_bet}}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            Roles
+                            Max Days
                         </th>
                         <td>
-                            @foreach($user->roles as $id => $roles)
-                                <span class="label label-info label-many">{{ $roles->title }}</span>
-                            @endforeach
+                            {{ $user->max_day ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            User state
+                        </th>
+                        <td>
+                            {{ $user->status ?? '' }}
                         </td>
                     </tr>
                 </tbody>
+
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
                 {{ trans('global.back_to_list') }}

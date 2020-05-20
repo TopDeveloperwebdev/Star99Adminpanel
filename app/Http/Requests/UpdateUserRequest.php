@@ -19,18 +19,8 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'    => [
+            'phone'    => [
                 'required',
-            ],
-            'email'   => [
-                'required',
-            ],
-            'roles.*' => [
-                'integer',
-            ],
-            'roles'   => [
-                'required',
-                'array',
             ],
         ];
     }

@@ -17,4 +17,5 @@ class Player extends Model
         'max_day',
         'status'
     ];
+    protected $primaryKey = 'id';
 }

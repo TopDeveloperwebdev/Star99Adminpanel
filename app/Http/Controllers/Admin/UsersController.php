@@ -35,35 +35,26 @@ class UsersController extends Controller
     {
         $user = User::create($request->all());
         $user->roles()->sync($request->input('roles', []));
-
         return redirect()->route('admin.users.index');
     }
 
-    public function edit(User $user)
+    public function edit($id)
     {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $roles = Role::all()->pluck('title', 'id');
-
-        $user->load('roles');
-
-        return view('admin.users.edit', compact('roles', 'user'));
+        $user = Player::find($id);
+        return view('admin.users.edit', compact('user'));
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, Player $user)
     {
         $user->update($request->all());
-        $user->roles()->sync($request->input('roles', []));
 
         return redirect()->route('admin.users.index');
     }
 
-    public function show(User $user)
+    public function show($id)
     {
-        abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $user->load('roles');
-
+        $user = Player::find($id);
         return view('admin.users.show', compact('user'));
     }
 
