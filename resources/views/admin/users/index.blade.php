@@ -33,7 +33,7 @@
                             Max Day
                         </th>
                         <th>
-                            State
+                        State
                         </th>
                         <th>
                             Actions
@@ -65,7 +65,7 @@
                             {{ $user->max_day ?? '' }}
                         </td>
                         <td>
-                            {{ $user->status ?? '' }}
+                         {{ $user->status ? 'activate' : 'suspend'}}
                         </td>
                         <td>
                             <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
