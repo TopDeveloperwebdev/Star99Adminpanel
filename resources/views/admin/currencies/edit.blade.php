@@ -3,49 +3,41 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.currency.title_singular') }}
+        {{ trans('global.edit') }} {{ $currency->bet_type }}
     </div>
 
     <div class="card-body">
         <form action="{{ route("admin.currencies.update", [$currency->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                <label for="name">{{ trans('cruds.currency.fields.name') }}*</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($currency) ? $currency->name : '') }}" required>
-                @if($errors->has('name'))
-                    <p class="help-block">
-                        {{ $errors->first('name') }}
-                    </p>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.currency.fields.name_helper') }}
+            <div class="form-group {{ $errors->has('payout') ? 'has-error' : '' }}">
+                <label for="payout">Payout*</label>
+                <input type="text" id="payout" name="payout" class="form-control" value="{{ old('payout', isset($currency) ? $currency->payout : '') }}" required>
+                @if($errors->has('payout'))
+                <p class="help-block">
+                    {{ $errors->first('payout') }}
                 </p>
+                @endif
+
             </div>
-            <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
-                <label for="code">{{ trans('cruds.currency.fields.code') }}*</label>
-                <input type="text" id="code" name="code" class="form-control" value="{{ old('code', isset($currency) ? $currency->code : '') }}" required>
-                @if($errors->has('code'))
-                    <p class="help-block">
-                        {{ $errors->first('code') }}
-                    </p>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.currency.fields.code_helper') }}
+            <div class="form-group {{ $errors->has('max_amount') ? 'has-error' : '' }}">
+                <label for="max_amount">Max Betting Amount*</label>
+                <input type="number" id="max_amount" name="max_amount" class="form-control" value="{{ old('max_amount', isset($currency) ? $currency->max_amount : '') }}" required>
+                @if($errors->has('max_amount'))
+                <p class="help-block">
+                    {{ $errors->first('max_amount') }}
                 </p>
+                @endif
             </div>
-            <div class="form-group {{ $errors->has('main_currency') ? 'has-error' : '' }}">
-                <label for="main_currency">{{ trans('cruds.currency.fields.main_currency') }}</label>
-                <input name="main_currency" type="hidden" value="0">
-                <input value="1" type="checkbox" id="main_currency" name="main_currency" {{ (isset($currency) && $currency->main_currency) || old('main_currency', 0) === 1 ? 'checked' : '' }}>
-                @if($errors->has('main_currency'))
-                    <p class="help-block">
-                        {{ $errors->first('main_currency') }}
-                    </p>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.currency.fields.main_currency_helper') }}
+
+            <div class="form-group {{ $errors->has('difference') ? 'has-error' : '' }}">
+                <label for="difference">Difference *</label>
+                <input type="number" id="difference" name="difference" class="form-control" value="{{ old('difference', isset($currency) ?  $currency->difference  : '') }}" required>
+                @if($errors->has('difference'))
+                <p class="help-block">
+                    {{ $errors->first('difference') }}
                 </p>
+                @endif
             </div>
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">

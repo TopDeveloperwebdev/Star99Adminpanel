@@ -12,36 +12,37 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.id') }}
+                            Bet_type
                         </th>
                         <td>
-                            {{ $currency->id }}
+                            {{ $currency->bet_type ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.name') }}
+                            Payout
                         </th>
                         <td>
-                            {{ $currency->name }}
+                            {{ $currency->payout ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.code') }}
+                            Max_amount
                         </th>
                         <td>
-                            {{ $currency->code }}
+                            {{ $currency->max_amount ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.currency.fields.main_currency') }}
+                            Difference
                         </th>
                         <td>
-                            <input type="checkbox" disabled {{ $currency->main_currency ? "checked" : "" }}>
+                            {{ $currency->difference ?? '' }}
                         </td>
                     </tr>
+
                 </tbody>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">

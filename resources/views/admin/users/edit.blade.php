@@ -46,7 +46,7 @@
                 </p>
                 @endif
             </div>
-            <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
+            <!-- <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                 <label for="name">User Status*</label>
                 <input type="number" id="status" name="status" class="form-control" value="{{ old('status', isset($user) ? $user->status : '') }}" required>
                 @if($errors->has('status'))
@@ -54,7 +54,17 @@
                     {{ $errors->first('status') }}
                 </p>
                 @endif
+            </div> -->
+            <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
+                <label for="status">User Status*
+                </label>
+                <select name="status" id="status" class="form-control select2" required>
+                    @foreach([0,1] as $id => $status)
+                    <option value="{{$status}}" {{ $user->status == $status ? 'selected' : ''}}>{{ $status ? 'Activate' : 'Suspend' }}</option>
+                    @endforeach
+                </select>
             </div>
+
             <div>
                 <input class="btn btn-danger" type="submit" value="save">
             </div>

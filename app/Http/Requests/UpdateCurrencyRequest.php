@@ -19,12 +19,16 @@ class UpdateCurrencyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
+            'payout' => [
                 'required',
             ],
-            'code' => [
+            'max_amount' => [
                 'required',
             ],
+            'difference' => [
+                'required',
+            ]
+
         ];
     }
 }

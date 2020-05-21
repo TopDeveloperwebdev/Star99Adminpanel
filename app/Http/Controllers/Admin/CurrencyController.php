@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Bet_set;
 use App\Currency;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyCurrencyRequest;
@@ -15,49 +16,42 @@ class CurrencyController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('currency_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $currencies = Currency::all();
-
+        $currencies = Bet_set::all();
         return view('admin.currencies.index', compact('currencies'));
     }
 
     public function create()
     {
-        abort_if(Gate::denies('currency_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('admin.currencies.create');
     }
 
     public function store(StoreCurrencyRequest $request)
     {
-        $currency = Currency::create($request->all());
+        $currency = Bet_set::create($request->all());
 
         return redirect()->route('admin.currencies.index');
     }
 
-    public function edit(Currency $currency)
+    public function edit(Bet_set $currency)
     {
-        abort_if(Gate::denies('currency_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         return view('admin.currencies.edit', compact('currency'));
     }
 
-    public function update(UpdateCurrencyRequest $request, Currency $currency)
+    public function update(UpdateCurrencyRequest $request, Bet_set $currency)
     {
+
         $currency->update($request->all());
 
         return redirect()->route('admin.currencies.index');
     }
 
-    public function show(Currency $currency)
+    public function show(Bet_set $currency)
     {
-        abort_if(Gate::denies('currency_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         return view('admin.currencies.show', compact('currency'));
     }
 
-    public function destroy(Currency $currency)
+    public function destroy(Bet_set $currency)
     {
         abort_if(Gate::denies('currency_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -68,7 +62,7 @@ class CurrencyController extends Controller
 
     public function massDestroy(MassDestroyCurrencyRequest $request)
     {
-        Currency::whereIn('id', request('ids'))->delete();
+        Bet_set::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
     }

@@ -65,7 +65,7 @@
                             {{ $user->max_day ?? '' }}
                         </td>
                         <td>
-                         {{ $user->status ? 'activate' : 'suspend'}}
+                         {{ $user->status ? 'Activate' : 'Suspend'}}
                         </td>
                         <td>
                             <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
