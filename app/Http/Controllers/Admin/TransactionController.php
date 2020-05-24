@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\history;
 use App\Currency;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyTransactionRequest;
@@ -19,81 +20,51 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('transaction_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $transactions = Transaction::all();
-
+        $transactions = history::all();
         return view('admin.transactions.index', compact('transactions'));
     }
 
     public function create()
     {
-        abort_if(Gate::denies('transaction_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $projects = Project::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $transaction_types = TransactionType::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $income_sources = IncomeSource::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $currencies = Currency::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        return view('admin.transactions.create', compact('projects', 'transaction_types', 'income_sources', 'currencies'));
+        return view('admin.transactions.create');
     }
 
     public function store(StoreTransactionRequest $request)
     {
-        $transaction = Transaction::create($request->all());
+        $currency = history::create($request->all());
 
         return redirect()->route('admin.transactions.index');
     }
 
-    public function edit(Transaction $transaction)
+    public function edit(history $currency)
     {
-        abort_if(Gate::denies('transaction_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $projects = Project::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $transaction_types = TransactionType::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $income_sources = IncomeSource::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $currencies = Currency::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
-        $transaction->load('project', 'transaction_type', 'income_source', 'currency');
-
-        return view('admin.transactions.edit', compact('projects', 'transaction_types', 'income_sources', 'currencies', 'transaction'));
+        return view('admin.transactions.edit', compact('currency'));
     }
 
-    public function update(UpdateTransactionRequest $request, Transaction $transaction)
+    public function update(Request $request, history $currency)
     {
-        $transaction->update($request->all());
+
+        $currency->update($request->all());
 
         return redirect()->route('admin.transactions.index');
     }
 
-    public function show(Transaction $transaction)
+    public function show(history $currency)
     {
-        abort_if(Gate::denies('transaction_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $transaction->load('project', 'transaction_type', 'income_source', 'currency');
-
-        return view('admin.transactions.show', compact('transaction'));
+        return view('admin.transactions.show', compact('currency'));
     }
 
-    public function destroy(Transaction $transaction)
+    public function destroy(history $currency)
     {
-        abort_if(Gate::denies('transaction_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $transaction->delete();
+        $currency->delete();
 
         return back();
     }
 
-    public function massDestroy(MassDestroyTransactionRequest $request)
+    public function massDestroy(Request $request)
     {
-        Transaction::whereIn('id', request('ids'))->delete();
-
         return response(null, Response::HTTP_NO_CONTENT);
     }
 }

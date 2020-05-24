@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 @section('content')
 @can('transaction_create')
-    <div style="margin-bottom: 10px;" class="row">
-        <div class="col-lg-12">
-            <a class="btn btn-success" href="{{ route("admin.transactions.create") }}">
-                {{ trans('global.add') }} {{ trans('cruds.transaction.title_singular') }}
-            </a>
-        </div>
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route("admin.transactions.create") }}">
+            {{ trans('global.add') }} {{ trans('cruds.transaction.title_singular') }}
+        </a>
     </div>
+</div>
 @endcan
 <div class="card">
     <div class="card-header">
@@ -20,97 +20,82 @@
                 <thead>
                     <tr>
                         <th width="10">
-
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.id') }}
+                            Date
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.project') }}
+                            Round
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.transaction_type') }}
+                            Total
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.income_source') }}
+                            Bet
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.amount') }}
+                            Status
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.currency') }}
+                            Balance
                         </th>
                         <th>
-                            {{ trans('cruds.transaction.fields.transaction_date') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.transaction.fields.name') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.transaction.fields.description') }}
-                        </th>
-                        <th>
-                            &nbsp;
+                            Actions
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($transactions as $key => $transaction)
-                        <tr data-entry-id="{{ $transaction->id }}">
-                            <td>
+                    <tr data-entry-id="{{ $transaction->id }}">
+                        <td>
 
-                            </td>
-                            <td>
-                                {{ $transaction->id ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->project->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->transaction_type->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->income_source->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->amount ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->currency->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->transaction_date ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->name ?? '' }}
-                            </td>
-                            <td>
-                                {{ $transaction->description ?? '' }}
-                            </td>
-                            <td>
-                                @can('transaction_show')
-                                    <a class="btn btn-xs btn-primary" href="{{ route('admin.transactions.show', $transaction->id) }}">
-                                        {{ trans('global.view') }}
-                                    </a>
-                                @endcan
+                        </td>
+                        <td>
+                            {{ $transaction->id ?? '' }}
+                        </td>
+                        <td>
+                            {{ $transaction->project->name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $transaction->transaction_type->name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $transaction->income_source->name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $transaction->amount ?? '' }}
+                        </td>
+                        <td>
+                            {{ $transaction->currency->name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $transaction->transaction_date ?? '' }}
+                        </td>
 
-                                @can('transaction_edit')
-                                    <a class="btn btn-xs btn-info" href="{{ route('admin.transactions.edit', $transaction->id) }}">
-                                        {{ trans('global.edit') }}
-                                    </a>
-                                @endcan
+                        <td>
+                            @can('transaction_show')
+                            <a class="btn btn-xs btn-primary" href="{{ route('admin.transactions.show', $transaction->id) }}">
+                                {{ trans('global.view') }}
+                            </a>
+                            @endcan
 
-                                @can('transaction_delete')
-                                    <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                                    </form>
-                                @endcan
+                            @can('transaction_edit')
+                            <a class="btn btn-xs btn-info" href="{{ route('admin.transactions.edit', $transaction->id) }}">
+                                {{ trans('global.edit') }}
+                            </a>
+                            @endcan
 
-                            </td>
+                            @can('transaction_delete')
+                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                            </form>
+                            @endcan
 
-                        </tr>
+                        </td>
+
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -121,48 +106,64 @@
 @section('scripts')
 @parent
 <script>
-    $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-@can('transaction_delete')
-  let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
-  let deleteButton = {
-    text: deleteButtonTrans,
-    url: "{{ route('admin.transactions.massDestroy') }}",
-    className: 'btn-danger',
-    action: function (e, dt, node, config) {
-      var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
-          return $(entry).data('entry-id')
-      });
+    $(function() {
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        @can('transaction_delete')
+        let deleteButtonTrans = '{{ trans('
+        global.datatables.delete ') }}'
+        let deleteButton = {
+            text: deleteButtonTrans,
+            url: "{{ route('admin.transactions.massDestroy') }}",
+            className: 'btn-danger',
+            action: function(e, dt, node, config) {
+                var ids = $.map(dt.rows({
+                    selected: true
+                }).nodes(), function(entry) {
+                    return $(entry).data('entry-id')
+                });
 
-      if (ids.length === 0) {
-        alert('{{ trans('global.datatables.zero_selected') }}')
+                if (ids.length === 0) {
+                    alert('{{ trans('
+                        global.datatables.zero_selected ') }}')
 
-        return
-      }
+                    return
+                }
 
-      if (confirm('{{ trans('global.areYouSure') }}')) {
-        $.ajax({
-          headers: {'x-csrf-token': _token},
-          method: 'POST',
-          url: config.url,
-          data: { ids: ids, _method: 'DELETE' }})
-          .done(function () { location.reload() })
-      }
-    }
-  }
-  dtButtons.push(deleteButton)
-@endcan
+                if (confirm('{{ trans('
+                        global.areYouSure ') }}')) {
+                    $.ajax({
+                            headers: {
+                                'x-csrf-token': _token
+                            },
+                            method: 'POST',
+                            url: config.url,
+                            data: {
+                                ids: ids,
+                                _method: 'DELETE'
+                            }
+                        })
+                        .done(function() {
+                            location.reload()
+                        })
+                }
+            }
+        }
+        dtButtons.push(deleteButton)
+        @endcan
 
-  $.extend(true, $.fn.dataTable.defaults, {
-    order: [[ 1, 'desc' ]],
-    pageLength: 100,
-  });
-  $('.datatable-Transaction:not(.ajaxTable)').DataTable({ buttons: dtButtons })
-    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
-        $($.fn.dataTable.tables(true)).DataTable()
-            .columns.adjust();
-    });
-})
-
+        $.extend(true, $.fn.dataTable.defaults, {
+            order: [
+                [1, 'desc']
+            ],
+            pageLength: 100,
+        });
+        $('.datatable-Transaction:not(.ajaxTable)').DataTable({
+            buttons: dtButtons
+        })
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        });
+    })
 </script>
 @endsection
