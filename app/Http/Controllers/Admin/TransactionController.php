@@ -16,17 +16,20 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use Illuminate\Support\Facades\DB;
+
 class TransactionController extends Controller
 {
     public function index()
     {
-        $transactions = history::all();
-        return view('admin.transactions.index', compact('transactions'));
+        // $transactions = history::all();
+        $drawList = DB::select("SELECT *  from betlist_table");
+
+        return view('admin.transactions.index', compact('drawList'));
     }
 
     public function create()
     {
-
         return view('admin.transactions.create');
     }
 

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class history extends Model
 {
     //
-    public $table = 'transaction_table';
+    public $table = 'betlist_table';
     protected $fillable = [
         'id',
-        'Date',
+        'bet_date',
     ];
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'bet_date';
 }

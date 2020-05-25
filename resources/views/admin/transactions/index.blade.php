@@ -1,169 +1,123 @@
 @extends('layouts.admin')
 @section('content')
-@can('transaction_create')
-<div style="margin-bottom: 10px;" class="row">
-    <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route("admin.transactions.create") }}">
-            {{ trans('global.add') }} {{ trans('cruds.transaction.title_singular') }}
-        </a>
-    </div>
-</div>
-@endcan
-<div class="card">
-    <div class="card-header">
-        {{ trans('cruds.transaction.title_singular') }} {{ trans('global.list') }}
-    </div>
+<div class="content container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card w-100 mt-5">
+                <div class="card-header">
+                    Welcome
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <table class="table table-bordered table-striped draw-list">
+                            <thead>
+                                <tr class="">
+                                    <th class="double-border">DATE</th>
+                                    <th class="double-border">Round</th>
+                                    <th>Total</th>
+                                    <th> Bet Status</th>
+                                    <th>Balance</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id='tbody'>
 
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class=" table table-bordered table-striped table-hover datatable datatable-Transaction">
-                <thead>
-                    <tr>
-                        <th width="10">
-                        </th>
-                        <th>
-                            Date
-                        </th>
-                        <th>
-                            Round
-                        </th>
-                        <th>
-                            Total
-                        </th>
-                        <th>
-                            Bet
-                        </th>
-                        <th>
-                            Status
-                        </th>
-                        <th>
-                            Balance
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($transactions as $key => $transaction)
-                    <tr data-entry-id="{{ $transaction->id }}">
-                        <td>
+                            </tbody>
+                        </table>
+                    </div>
 
-                        </td>
-                        <td>
-                            {{ $transaction->id ?? '' }}
-                        </td>
-                        <td>
-                            {{ $transaction->project->name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $transaction->transaction_type->name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $transaction->income_source->name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $transaction->amount ?? '' }}
-                        </td>
-                        <td>
-                            {{ $transaction->currency->name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $transaction->transaction_date ?? '' }}
-                        </td>
 
-                        <td>
-                            @can('transaction_show')
-                            <a class="btn btn-xs btn-primary" href="{{ route('admin.transactions.show', $transaction->id) }}">
-                                {{ trans('global.view') }}
-                            </a>
-                            @endcan
-
-                            @can('transaction_edit')
-                            <a class="btn btn-xs btn-info" href="{{ route('admin.transactions.edit', $transaction->id) }}">
-                                {{ trans('global.edit') }}
-                            </a>
-                            @endcan
-
-                            @can('transaction_delete')
-                            <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                            </form>
-                            @endcan
-
-                        </td>
-
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 @endsection
+<script>
+    function renderPage(drawList) {
+        var html = "";
+        var date = new Object();
+        Object.keys(drawList).forEach(function(rkey, row) {
+            date[drawList[rkey]['bet_date']] = 0;
+        });
+        var parseTable = new Object();
+        Object.keys(drawList).forEach(function(rkey, row) {
+            parseTable[drawList[rkey]['bet_date'] + drawList[rkey]['round']] = {
+                total: 0,
+                status: 0,
+                balance: 0,
+                bet_date: drawList[rkey]['bet_date'],
+                round: drawList[rkey]['round']
+            };
+        });
+        var iRow = 0;
+        var iRoud = 0;
+
+        Object.keys(drawList).forEach(function(rkey, row) {
+            var bettedNumbers = JSON.parse(drawList[rkey]['bettedNumbers']);
+            var bettedAmount = JSON.parse(drawList[rkey]['bettedAmount']);
+            var bettedBig = JSON.parse(drawList[rkey]['bettedBig']);
+            var bettedSmall = JSON.parse(drawList[rkey]['bettedSmall']);
+            var bettedEven = JSON.parse(drawList[rkey]['bettedEven']);
+            var bettedOdd = JSON.parse(drawList[rkey]['bettedOdd']);
+            var payout = JSON.parse(drawList[rkey]['payout']);
+            var won = JSON.parse(drawList[rkey]['won']);
+            var total = 0;
+            var status = 0;
+            var balance = 0;
+            for (let i = 0; i < bettedNumbers.length; i++) {
+                status += (bettedAmount[i] == null) ? 0 : bettedAmount[i];
+                status += (bettedBig[i] == null) ? 0 : bettedBig[i];
+                status += (bettedSmall[i] == null) ? 0 : bettedSmall[i];
+                status += (bettedEven[i] == null) ? 0 : bettedEven[i];
+                status += (bettedOdd[i] == null) ? 0 : bettedOdd[i];
+                status -= (won[i] == '') ? 0 : Number(won[i]);
+            }
+            total = Number(drawList[rkey]['total']);
+            date[drawList[rkey]['bet_date']] += 1;
+            parseTable[drawList[rkey]['bet_date'] + drawList[rkey]['round']].total += total;
+            parseTable[drawList[rkey]['bet_date'] + drawList[rkey]['round']].status += status;
+        })
+        let costItems = parseTable;
+        Object.keys(costItems)
+            .sort()
+            .forEach(function(rkey, row) {
+                html += '<tr>';
+                if (iRow == 0) {
+                    html += '<td  rowspan=' + date[costItems[rkey]['bet_date']] + '>';
+                    html += costItems[rkey]['bet_date'];
+                    html += '</td>'
+                    iRow = date[costItems[rkey]['bet_date']];
+                }
+                iRow--;
+                html += '<td>';
+                html += costItems[rkey]['round'];
+                html += '</td>';
+                html += '<td >';
+                html += costItems[rkey]['total'];
+                html += '</td>'
+                html += '<td >';
+                html += (costItems[rkey]['status'] > 0 ? '+' : '-') + costItems[rkey]['status'];
+                html += '</td>';
+                html += '<td >';
+                html += (costItems[rkey]['balance'] ? '$' : '') + costItems[rkey]['balance'];
+                html += '</td>';
+                html += '<td >';
+                html += "<a class='btn btn-xs btn-primary' href=''> view </a>";
+                html += '</td>';
+                html += '</tr>';
+            });
+
+        $('#tbody').empty();
+        $('#tbody').append(html);
+    }
+
+    window.onload = () => {
+        var drawList = <?php echo json_encode($drawList); ?>;
+        renderPage(drawList);
+    }
+</script>
 @section('scripts')
 @parent
-<script>
-    $(function() {
-        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('transaction_delete')
-        let deleteButtonTrans = '{{ trans('
-        global.datatables.delete ') }}'
-        let deleteButton = {
-            text: deleteButtonTrans,
-            url: "{{ route('admin.transactions.massDestroy') }}",
-            className: 'btn-danger',
-            action: function(e, dt, node, config) {
-                var ids = $.map(dt.rows({
-                    selected: true
-                }).nodes(), function(entry) {
-                    return $(entry).data('entry-id')
-                });
 
-                if (ids.length === 0) {
-                    alert('{{ trans('
-                        global.datatables.zero_selected ') }}')
-
-                    return
-                }
-
-                if (confirm('{{ trans('
-                        global.areYouSure ') }}')) {
-                    $.ajax({
-                            headers: {
-                                'x-csrf-token': _token
-                            },
-                            method: 'POST',
-                            url: config.url,
-                            data: {
-                                ids: ids,
-                                _method: 'DELETE'
-                            }
-                        })
-                        .done(function() {
-                            location.reload()
-                        })
-                }
-            }
-        }
-        dtButtons.push(deleteButton)
-        @endcan
-
-        $.extend(true, $.fn.dataTable.defaults, {
-            order: [
-                [1, 'desc']
-            ],
-            pageLength: 100,
-        });
-        $('.datatable-Transaction:not(.ajaxTable)').DataTable({
-            buttons: dtButtons
-        })
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            $($.fn.dataTable.tables(true)).DataTable()
-                .columns.adjust();
-        });
-    })
-</script>
 @endsection
