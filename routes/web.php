@@ -17,6 +17,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::resource('users', 'UsersController');
+    Route::post('users/filter', 'UsersController@filterUsers')->name('filterUsers');
 
     // Currencies
     Route::delete('currencies/destroy', 'CurrencyController@massDestroy')->name('currencies.massDestroy');

@@ -5,32 +5,37 @@
     <div class="card-header">
         {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
     </div>
+
     <div class="container">
-        <div class="col-md-1">From</div>
-        <div class='col-md-4'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker6'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+        <form action="{{ route('admin.filterUsers') }}" method="POST">
+            @csrf
+            <div class="col-md-1">From</div>
+            <div class='col-md-4'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker6'>
+                        <input type='text' class="form-control" name="sDate" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-1">To</div>
-        <div class='col-md-4'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker7'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+            <div class="col-md-1">To</div>
+            <div class='col-md-4'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker7'>
+                        <input type='text' class="form-control" name="eDate" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="col-md-1">
+                <input type="submit" class="btn btn-xs btn-primary" value="view" />
+            </div>
+        </form>
     </div>
-
-
     <div class="card-body">
         <div class="table-responsive">
             <table class=" table table-bordered table-striped table-hover datatable datatable-User">
@@ -114,6 +119,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 @section('scripts')
 @parent
@@ -188,8 +194,8 @@
         $('#datetimepicker6').click(function(e) {
             console.log(e);
         })
-        $('#datetimepicker6').datepicker();
-        $('#datetimepicker7').datepicker({
+        $('#datetimepicker6').datetimepicker();
+        $('#datetimepicker7').datetimepicker({
             useCurrent: false //Important! See issue #1075
         });
         $("#datetimepicker6").on("dp.change", function(e) {
@@ -200,4 +206,5 @@
         });
     });
 </script>
+
 @endsection

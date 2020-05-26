@@ -12,7 +12,7 @@ use App\Player;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\DB;
 class UsersController extends Controller
 {
     public function index()
@@ -21,7 +21,15 @@ class UsersController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
+    public function filterUsers(Request $request){
+        $filterKey = $request->all();
 
+        $sdate = date('yy-m-d h:m:s',strtotime($filterKey['sDate'])) ;
+        $edate = date('yy-m-d h:m:s',strtotime($filterKey['eDate'])) ;
+        $users =  DB::select("SELECT `created_at` FROM `players` WHERE `created_at` > '$sdate' And `created_at` <= '$edate' ORDER BY `created_at` ASC");
+
+        return view('admin.users.index', compact('users'));
+    }
     public function create()
     {
         abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -40,7 +48,6 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-
         $user = Player::find($id);
         return view('admin.users.edit', compact('user'));
     }
