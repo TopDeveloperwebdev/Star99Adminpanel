@@ -64,10 +64,8 @@ class UsersController extends Controller
         return view('admin.users.show', compact('user'));
     }
 
-    public function destroy(User $user)
+    public function destroy(Player $user)
     {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $user->delete();
 
         return back();

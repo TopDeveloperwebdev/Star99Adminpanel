@@ -125,9 +125,8 @@
 @parent
 <script>
     let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-    @can('user_delete')
-    let deleteButtonTrans = '{{ trans('
-    global.datatables.delete ') }}'
+
+    let deleteButtonTrans = 'delete';
     let deleteButton = {
         text: deleteButtonTrans,
         url: "{{ route('admin.users.massDestroy') }}",
@@ -140,14 +139,12 @@
             });
 
             if (ids.length === 0) {
-                alert('{{ trans('
-                    global.datatables.zero_selected ') }}')
+                alert('zero_selected')
 
                 return
             }
 
-            if (confirm('{{ trans('
-                    global.areYouSure ') }}')) {
+            if (confirm('areYouSure')) {
                 $.ajax({
                         headers: {
                             'x-csrf-token': _token
@@ -166,7 +163,7 @@
         }
     }
     dtButtons.push(deleteButton)
-    @endcan
+
 
     $.extend(true, $.fn.dataTable.defaults, {
         order: [
