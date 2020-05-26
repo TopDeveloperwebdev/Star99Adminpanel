@@ -19,9 +19,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone'    => [
-                'required',
-            ],
+
         ];
     }
 }

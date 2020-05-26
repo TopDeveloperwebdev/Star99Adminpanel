@@ -12,16 +12,6 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route("admin.client-reports.index") }}" class="nav-link {{ request()->is('admin/client-reports') || request()->is('admin/client-reports/*') ? 'active' : '' }}">
-                        <i class="fa-fw fas fa-chart-line">
-
-                        </i>
-                        <p>
-                            <span>{{ trans('cruds.clientReport.title') }}</span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}" href="{{ route("admin.users.index") }}">
                         <i class="fa-fw fas fa-users">
                         </i>

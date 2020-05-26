@@ -3,22 +3,13 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.edit') }} {{ trans('cruds.user.title_singular') }}
+        {{ trans('global.edit') }} User({{ $user->phone }})
     </div>
 
     <div class="card-body">
         <form action="{{ route("admin.users.update", [$user->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
-            <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
-                <label for="name">Phone *</label>
-                <input type="phone" id="phone" name="phone" class="form-control" value="{{ old('phone', isset($user) ? $user->phone : '') }}" required>
-                @if($errors->has('phone'))
-                <p class="help-block">
-                    {{ $errors->first('phone') }}
-                </p>
-                @endif
-            </div>
             <div class="form-group {{ $errors->has('credits') ? 'has-error' : '' }}">
                 <label for="name">Credits *</label>
                 <input type="number" id="credits" name="credits" class="form-control" value="{{ old('credits', isset($user) ? $user->credits : '') }}" required>

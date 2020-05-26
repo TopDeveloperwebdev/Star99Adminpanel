@@ -15,7 +15,7 @@ class User extends Authenticatable
 {
     use SoftDeletes, Notifiable, HasApiTokens;
 
-    public $table = 'users';
+    public $table = 'admin';
 
     protected $hidden = [
         'password',

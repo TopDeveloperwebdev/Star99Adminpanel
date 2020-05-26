@@ -23,7 +23,6 @@ class UsersController extends Controller
     }
     public function filterUsers(Request $request){
         $filterKey = $request->all();
-
         $sdate = date('yy-m-d h:m:s',strtotime($filterKey['sDate'])) ;
         $edate = date('yy-m-d h:m:s',strtotime($filterKey['eDate'])) ;
         $users =  DB::select("SELECT `created_at` FROM `players` WHERE `created_at` > '$sdate' And `created_at` <= '$edate' ORDER BY `created_at` ASC");
