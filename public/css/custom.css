@@ -42,7 +42,7 @@ table.dataTable thead .sorting_desc {
     background-image: none;
 }
 
-.btn-group-xs > .btn,
+.btn-group-xs>.btn,
 .btn-xs {
     padding: 1px 5px;
     font-size: 12px;
@@ -53,20 +53,46 @@ table.dataTable thead .sorting_desc {
 .searchable-title {
     font-weight: bold;
 }
+
 .select2-container--open {
     z-index: 9999;
 }
+
 .searchable-fields {
-    padding-left:5px;
+    padding-left: 5px;
 }
+
 .searchable-link {
-    padding:0 5px 0 5px;
+    padding: 0 5px 0 5px;
 }
-.searchable-link:hover   {
+
+.searchable-link:hover {
     cursor: pointer;
     background: #eaeaea;
 }
+
 .select2-results__option {
     padding-left: 0px;
     padding-right: 0px;
+}
+
+.container {
+    margin-top: 50px;
+    width: 800px;
+}
+
+.datepicker-days td.day.new {
+    background: white;
+}
+
+.datepicker-days td.day.hovered {
+    background: #eee;
+}
+
+.datepicker-days td.day.active {
+    background: red;
+}
+
+.datepicker-days td.day.disabled {
+    background: white;
 }

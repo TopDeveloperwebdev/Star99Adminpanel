@@ -5,6 +5,31 @@
     <div class="card-header">
         {{ trans('cruds.user.title_singular') }} {{ trans('global.list') }}
     </div>
+    <div class="container">
+        <div class="col-md-1">From</div>
+        <div class='col-md-4'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker6'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">To</div>
+        <div class='col-md-4'>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker7'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="card-body">
         <div class="table-responsive">
@@ -33,7 +58,7 @@
                             Max Day
                         </th>
                         <th>
-                        State
+                            State
                         </th>
                         <th>
                             Actions
@@ -65,7 +90,7 @@
                             {{ $user->max_day ?? '' }}
                         </td>
                         <td>
-                         {{ $user->status ? 'Activate' : 'Suspend'}}
+                            {{ $user->status ? 'Activate' : 'Suspend'}}
                         </td>
                         <td>
                             <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
@@ -93,64 +118,86 @@
 @section('scripts')
 @parent
 <script>
-    $(function() {
-        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('user_delete')
-        let deleteButtonTrans = '{{ trans('
-        global.datatables.delete ') }}'
-        let deleteButton = {
-            text: deleteButtonTrans,
-            url: "{{ route('admin.users.massDestroy') }}",
-            className: 'btn-danger',
-            action: function(e, dt, node, config) {
-                var ids = $.map(dt.rows({
-                    selected: true
-                }).nodes(), function(entry) {
-                    return $(entry).data('entry-id')
-                });
+    let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+    @can('user_delete')
+    let deleteButtonTrans = '{{ trans('
+    global.datatables.delete ') }}'
+    let deleteButton = {
+        text: deleteButtonTrans,
+        url: "{{ route('admin.users.massDestroy') }}",
+        className: 'btn-danger',
+        action: function(e, dt, node, config) {
+            var ids = $.map(dt.rows({
+                selected: true
+            }).nodes(), function(entry) {
+                return $(entry).data('entry-id')
+            });
 
-                if (ids.length === 0) {
-                    alert('{{ trans('
-                        global.datatables.zero_selected ') }}')
+            if (ids.length === 0) {
+                alert('{{ trans('
+                    global.datatables.zero_selected ') }}')
 
-                    return
-                }
+                return
+            }
 
-                if (confirm('{{ trans('
-                        global.areYouSure ') }}')) {
-                    $.ajax({
-                            headers: {
-                                'x-csrf-token': _token
-                            },
-                            method: 'POST',
-                            url: config.url,
-                            data: {
-                                ids: ids,
-                                _method: 'DELETE'
-                            }
-                        })
-                        .done(function() {
-                            location.reload()
-                        })
-                }
+            if (confirm('{{ trans('
+                    global.areYouSure ') }}')) {
+                $.ajax({
+                        headers: {
+                            'x-csrf-token': _token
+                        },
+                        method: 'POST',
+                        url: config.url,
+                        data: {
+                            ids: ids,
+                            _method: 'DELETE'
+                        }
+                    })
+                    .done(function() {
+                        location.reload()
+                    })
             }
         }
-        dtButtons.push(deleteButton)
-        @endcan
+    }
+    dtButtons.push(deleteButton)
+    @endcan
 
-        $.extend(true, $.fn.dataTable.defaults, {
-            order: [
-                [1, 'desc']
-            ],
-            pageLength: 100,
-        });
-        $('.datatable-User:not(.ajaxTable)').DataTable({
-            buttons: dtButtons
-        })
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            $($.fn.dataTable.tables(true)).DataTable()
-                .columns.adjust();
-        });
+    $.extend(true, $.fn.dataTable.defaults, {
+        order: [
+            [1, 'desc']
+        ],
+        pageLength: 100,
+    });
+    $('.datatable-User:not(.ajaxTable)').DataTable({
+        buttons: dtButtons
     })
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    $($.fn.dataTable.tables(true)).DataTable()
+        .columns.adjust();
+    });
+    })
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+<script>
+    $(function() {
+        $('#datetimepicker6').click(function(e) {
+            console.log(e);
+        })
+        $('#datetimepicker6').datepicker();
+        $('#datetimepicker7').datepicker({
+            useCurrent: false //Important! See issue #1075
+        });
+        $("#datetimepicker6").on("dp.change", function(e) {
+            $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+        });
+        $("#datetimepicker7").on("dp.change", function(e) {
+            $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+        });
+    });
 </script>
 @endsection

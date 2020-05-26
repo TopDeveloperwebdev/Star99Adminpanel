@@ -19,6 +19,7 @@ class SettingTable extends Migration
             $table->string('payout');
             $table->integer('max_amount')->default(0);
             $table->integer('difference')->default(0);
+            $table->timestamps();
         });
     }
 
