@@ -85,29 +85,28 @@
                         <td>
                             {{ $user->phone ?? '' }}
                         </td>
-                        <td>
+
+                        <td contenteditable="true" class="edittd" id="credit_{{$key}}" required>
                             {{ $user->credits ?? '' }}
                         </td>
-                        <td>
+                        <td contenteditable="true" class="edittd" id="max_bet_{{$key}}" required>
                             {{ $user->max_bet ?? '' }}
                         </td>
-                        <td>
+                        <td contenteditable="true" class="edittd" id="max_day_{{$key}}" required>
                             {{ $user->max_day ?? '' }}
                         </td>
                         <td>
                             {{ $user->status ? 'Activate' : 'Suspend'}}
                         </td>
                         <td>
-                            <a class="btn btn-xs btn-primary" href="{{ route('admin.users.show', $user->id) }}">
-                                {{ trans('global.view') }}
-                            </a>
-                            <a class="btn btn-xs btn-info" href="{{ route('admin.users.edit', $user->id) }}">
-                                {{ trans('global.edit') }}
-                            </a>
                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                @if($user->status)
+                                <input type="submit" class="btn btn-xs btn-danger" value='Ban'>
+                                @else
+                                <input type="submit" class="btn btn-xs btn-danger" value='Active'>
+                                @endif
                             </form>
 
                         </td>
@@ -116,6 +115,15 @@
                     @endforeach
                 </tbody>
             </table>
+
+        </div>
+
+    </div>
+    <div style="margin-bottom: 10px;" class="row">
+        <div class="col-lg-12">
+            <a id='updateUsers' class="btn btn-success">
+                Update
+            </a>
         </div>
     </div>
 </div>
@@ -125,8 +133,9 @@
 @parent
 <script>
     let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-
-    let deleteButtonTrans = 'delete';
+    @can('user_delete')
+    let deleteButtonTrans = '{{ trans('
+    global.datatables.delete ') }}'
     let deleteButton = {
         text: deleteButtonTrans,
         url: "{{ route('admin.users.massDestroy') }}",
@@ -144,7 +153,7 @@
                 return
             }
 
-            if (confirm('areYouSure')) {
+            if (confirm('are You Sure')) {
                 $.ajax({
                         headers: {
                             'x-csrf-token': _token
@@ -163,7 +172,7 @@
         }
     }
     dtButtons.push(deleteButton)
-
+    @endcan
 
     $.extend(true, $.fn.dataTable.defaults, {
         order: [
@@ -180,7 +189,7 @@
     });
     })
 </script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
@@ -203,5 +212,42 @@
         });
     });
 </script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+<script>
+    $("#updateUsers").click(function() {
 
+        var users = <?php echo json_encode($users) ?>;
+        Object.keys(users).forEach(function(key) {
+            users[key]['max_bet'] = Number($("#credit_" + key).text());
+            users[key]['max_day'] = Number($("#max_day_" + key).text());
+            users[key]['credits'] = Number($("#max_bet_" + key).text());
+        });
+      console.log(users);
+      var data = {
+          users : users
+      };
+        $.ajax({
+            method: "POST",
+            headers: {
+                Accept: "application/json"
+            },
+            url: "{{ route('admin.updateUsers') }}",
+            data: data,
+            success: () => {
+                alert('Users are successfully edited!');
+            },
+            error: (response) => {
+                alert('Try again please');
+            }
+        })
+
+
+    });
+</script>
 @endsection

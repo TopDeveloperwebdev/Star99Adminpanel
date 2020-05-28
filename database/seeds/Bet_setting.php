@@ -26,9 +26,16 @@ class Bet_setting extends Seeder
                 'payout' => '1:1',
                 'max_amount' => 200,
                 'difference' => 20,
+
             ], [
                 'id'           => 3,
                 'bet_type' => 'Even / Odd',
+                'payout' => '1:1',
+                'max_amount' => 200,
+                'difference' => 20,
+            ], [
+                'id'           => 4,
+                'bet_type' => '0 & 5',
                 'payout' => '1:1',
                 'max_amount' => 200,
                 'difference' => 20,

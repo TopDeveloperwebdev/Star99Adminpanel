@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<div class="content container">
+<div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="card w-100 mt-5">
@@ -14,10 +14,8 @@
                                 <tr class="">
                                     <th class="double-border">DATE</th>
                                     <th class="double-border">Round</th>
-                                    <th>Total</th>
+                                    <th>Total Bets</th>
                                     <th> Bet Status</th>
-                                    <th>Balance</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id='tbody'>
@@ -98,12 +96,6 @@
                 html += '</td>'
                 html += '<td >';
                 html += (costItems[rkey]['status'] > 0 ? '+' : '-') + costItems[rkey]['status'];
-                html += '</td>';
-                html += '<td >';
-                html += (costItems[rkey]['balance'] ? '$' : '') + costItems[rkey]['balance'];
-                html += '</td>';
-                html += '<td >';
-                html += "<a class='btn btn-xs btn-primary' href=''> view </a>";
                 html += '</td>';
                 html += '</tr>';
             });

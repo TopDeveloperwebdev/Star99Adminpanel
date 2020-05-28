@@ -10,6 +10,15 @@
         <form action="{{ route("admin.currencies.update", [$currency->id]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <div class="form-group {{ $errors->has('bet_type') ? 'has-error' : '' }}">
+                <label for="bet_type">Bet Type</label>
+                <input type="text" id="bet_type" name="bet_type" class="form-control" value="{{ old('bet_type', isset($currency) ? $currency->bet_type : '') }}" required>
+                @if($errors->has('bet_type'))
+                <p class="help-block">
+                    {{ $errors->first('bet_type') }}
+                </p>
+                @endif
+            </div>
             <div class="form-group {{ $errors->has('payout') ? 'has-error' : '' }}">
                 <label for="payout">Payout*</label>
                 <input type="text" id="payout" name="payout" class="form-control" value="{{ old('payout', isset($currency) ? $currency->payout : '') }}" required>
@@ -18,7 +27,6 @@
                     {{ $errors->first('payout') }}
                 </p>
                 @endif
-
             </div>
             <div class="form-group {{ $errors->has('max_amount') ? 'has-error' : '' }}">
                 <label for="max_amount">Max Betting Amount*</label>

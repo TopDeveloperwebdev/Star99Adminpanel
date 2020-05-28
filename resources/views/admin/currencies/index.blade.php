@@ -1,11 +1,16 @@
 @extends('layouts.admin')
 @section('content')
-
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route('admin.showSettings') }}">
+            View history
+        </a>
+    </div>
+</div>
 <div class="card">
     <div class="card-header">
         {{ trans('cruds.currency.title_singular') }} {{ trans('global.list') }}
     </div>
-
     <div class="card-body">
         <div class="table-responsive">
             <table class=" table table-bordered table-striped table-hover datatable datatable-Currency">
@@ -17,16 +22,16 @@
                             Bet Type
                         </th>
                         <th>
-                            payout
+                            Payout
                         </th>
                         <th>
-                            max_amount
+                            Max Bet
                         </th>
                         <th>
-                            difference
+                            Difference %
                         </th>
                         <th>
-                            Action
+
                         </th>
                     </tr>
                 </thead>
@@ -34,7 +39,6 @@
                     @foreach($currencies as $key => $currency)
                     <tr data-entry-id="{{ $currency->id }}">
                         <td>
-
                         </td>
                         <td>
                             {{ $currency->bet_type ?? '' }}
@@ -49,17 +53,9 @@
                             {{ $currency->difference ?? '' }}
                         </td>
                         <td>
-                            <a class="btn btn-xs btn-primary" href="{{ route('admin.currencies.show', $currency->id) }}">
-                                {{ trans('global.view') }}
-                            </a>
                             <a class="btn btn-xs btn-info" href="{{ route('admin.currencies.edit', $currency->id) }}">
                                 {{ trans('global.edit') }}
                             </a>
-                            <form action="{{ route('admin.currencies.destroy', $currency->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
-                            </form>
                         </td>
                     </tr>
                     @endforeach

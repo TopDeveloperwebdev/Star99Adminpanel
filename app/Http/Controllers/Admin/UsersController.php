@@ -13,6 +13,7 @@ use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
+
 class UsersController extends Controller
 {
     public function index()
@@ -21,18 +22,17 @@ class UsersController extends Controller
 
         return view('admin.users.index', compact('users'));
     }
-    public function filterUsers(Request $request){
+    public function filterUsers(Request $request)
+    {
         $filterKey = $request->all();
-        $sdate = date('yy-m-d h:m:s',strtotime($filterKey['sDate'])) ;
-        $edate = date('yy-m-d h:m:s',strtotime($filterKey['eDate'])) ;
-        $users =  DB::select("SELECT `created_at` FROM `players` WHERE `created_at` > '$sdate' And `created_at` <= '$edate' ORDER BY `created_at` ASC");
+        $sdate = date('yy-m-d h:m:s', strtotime($filterKey['sDate']));
+        $edate = date('yy-m-d h:m:s', strtotime($filterKey['eDate']));
+        $users =  DB::select("SELECT * FROM `players` WHERE `created_at` > '$sdate' And `created_at` <= '$edate' ORDER BY `created_at` ASC");
 
         return view('admin.users.index', compact('users'));
     }
     public function create()
     {
-        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $roles = Role::all()->pluck('title', 'id');
 
         return view('admin.users.create', compact('roles'));
@@ -57,7 +57,21 @@ class UsersController extends Controller
 
         return redirect()->route('admin.users.index');
     }
+    public function updateUsers(Request $request, Player $user)
+    {
+        $all = $request->all();
+        $users = $all['users'];
+        foreach ($users  as $key => $row) {
+            DB::insert("UPDATE `players` SET `phone_verified_at` = NULL, `credits` = '$row[credits]', `max_bet` = '$row[max_bet]', `max_day` = '$row[max_day]'  WHERE `players`.`phone` = '$row[phone]'");
+        }
+         return redirect()->route('admin.users.index');
+    }
 
+    public function editUsers(UpdateUserRequest $request, Player $user)
+    {
+        $user->update($request->all());
+        return redirect()->route('admin.users.index');
+    }
     public function show($id)
     {
         $user = Player::find($id);
@@ -66,8 +80,8 @@ class UsersController extends Controller
 
     public function destroy(Player $user)
     {
-        $user->delete();
-
+        $user->status = !($user->status);
+        $user->save();
         return back();
     }
 

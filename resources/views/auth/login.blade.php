@@ -4,7 +4,7 @@
     <div class="login-logo">
         <div class="login-logo">
             <a href="#">
-                {{ trans('panel.site_title') }}
+                e4D CRM
             </a>
         </div>
     </div>
@@ -12,9 +12,9 @@
         <div class="card-body login-card-body">
             <p class="login-box-msg">Sign in to start your session</p>
             @if(\Session::has('message'))
-                <p class="alert alert-info">
-                    {{ \Session::get('message') }}
-                </p>
+            <p class="alert alert-info">
+                {{ \Session::get('message') }}
+            </p>
             @endif
             <form action="{{ route('login') }}" method="POST">
                 {{ csrf_field() }}
@@ -22,18 +22,18 @@
                 <div class="form-group">
                     <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" required autofocus placeholder="{{ trans('global.login_email') }}" name="email" value="{{ old('email', null) }}">
                     @if($errors->has('email'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('email') }}
-                        </div>
+                    <div class="invalid-feedback">
+                        {{ $errors->first('email') }}
+                    </div>
                     @endif
                 </div>
 
                 <div class="form-group">
                     <input type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" required placeholder="{{ trans('global.login_password') }}" name="password">
                     @if($errors->has('password'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('password') }}
-                        </div>
+                    <div class="invalid-feedback">
+                        {{ $errors->first('password') }}
+                    </div>
                     @endif
                 </div>
 

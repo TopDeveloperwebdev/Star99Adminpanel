@@ -18,11 +18,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::resource('users', 'UsersController');
     Route::post('users/filter', 'UsersController@filterUsers')->name('filterUsers');
-
+    Route::post('users/edit', 'UsersController@updateUsers')->name('updateUsers');
     // Currencies
     Route::delete('currencies/destroy', 'CurrencyController@massDestroy')->name('currencies.massDestroy');
     Route::resource('currencies', 'CurrencyController');
-
+    Route::post('currencies/filter', 'CurrencyController@showSettings')->name('showSettings');
 
     // Transactions
     Route::delete('transactions/destroy', 'TransactionController@massDestroy')->name('transactions.massDestroy');

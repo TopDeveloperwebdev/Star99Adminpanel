@@ -11,12 +11,21 @@ use App\Http\Requests\UpdateCurrencyRequest;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\DB;
 
 class CurrencyController extends Controller
 {
     public function index()
     {
-        $currencies = Bet_set::all();
+        $currencies =  DB::select(" SELECT b.*
+        FROM setting_table b
+        INNER JOIN
+          (
+            SELECT bet_type, MAX(a3.created_at) AS `date`
+            FROM setting_table a3
+            GROUP BY a3.bet_type
+          ) a
+          ON a.date = b.created_at AND a.bet_type = b.bet_type");
         return view('admin.currencies.index', compact('currencies'));
     }
 
@@ -40,14 +49,20 @@ class CurrencyController extends Controller
 
     public function update(UpdateCurrencyRequest $request, Bet_set $currency)
     {
-
-        $currency->update($request->all());
-
+        $client = new Bet_set($request->all());
+        $client->save();
         return redirect()->route('admin.currencies.index');
     }
 
-    public function show(Bet_set $currency)
+    public function show()
     {
+        $currencies = Bet_set::all();
+        return view('admin.currencies.show', compact('currencies'));
+    }
+    public function showSettings()
+    {
+        $currency = Bet_set::all();
+        dd($currency);
         return view('admin.currencies.show', compact('currency'));
     }
 
